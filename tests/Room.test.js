@@ -24,4 +24,10 @@ describe('Room', () => {
   it('Should return player with ID');
   it('Should update players color');
   it('Should return all players as Array of Objects');
+
+  it('updateLiveCells: should add cell if it is not occupied');
+  it('updateLiveCells: should remove cell if it is occupied by player');
+  it('updateLiveCells: should do nothing if the cell is already occupied by another player');
+
+  it('getLiveCells: should return an array with each live cell');
 });

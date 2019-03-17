@@ -9,7 +9,7 @@ describe('Index', () => {
   const room = {
     addPlayer: sinon.fake(),
     updatePlayer: sinon.fake(),
-    // getPlayers: sinon.fake(), stubbed below
+    // getPlayersList: sinon.fake(), stubbed below
   };
   const wss = {
     on: sinon.fake(),
@@ -23,7 +23,7 @@ describe('Index', () => {
   beforeEach(() => {
     player1 = { color: 'gray' };
     player2 = { color: 'blue' };
-    room.getPlayers = sinon.fake.returns([player1, player2]);
+    room.getPlayersList = sinon.fake.returns([player1, player2]);
     sinon.resetHistory();
   });
 
@@ -84,6 +84,11 @@ describe('Index', () => {
     describe('player:remove', () => {
       it('Should remove player with provide ID');
       it('Should broadcast remaining players list');
+    });
+
+    describe('world:update', () => {
+      it('Should update world with new cells');
+      it('Should broadcast new world configuration');
     });
   });
 });

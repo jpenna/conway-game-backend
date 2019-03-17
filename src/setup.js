@@ -7,26 +7,40 @@ function heartbeat() {
 }
 
 const actionMap = new Map([
+  // Init
   ['init', ({ wss, ws, room, payload }) => {
     const { id, color } = payload;
     const player = new Player({ id, color });
     room.addPlayer(player);
     ws.send({ type: 'players:self', payload: player });
     ws.playerId = player.id; // eslint-disable-line no-param-reassign
-    const players = room.getPlayers();
+    const players = room.getPlayersList();
     wss.broadcast({ type: 'players', payload: players });
   }],
+
+  // Players
   ['player:update', ({ wss, room, payload }) => {
     const { id, update } = payload;
     room.updatePlayer(id, update);
-    const players = room.getPlayers();
+    const players = room.getPlayersList();
     wss.broadcast({ type: 'players', payload: players });
   }],
   ['player:remove', ({ wss, room, payload }) => {
     const { id } = payload;
     room.removePlayer(id);
-    const players = room.getPlayers();
+    const players = room.getPlayersList();
     wss.broadcast({ type: 'players', payload: players });
+  }],
+
+  // World
+  ['world:update', ({ wss, ws, room, payload }) => {
+    const id = ws.playerId;
+    const { color } = room.getPlayer(id);
+    payload.forEach(({ key }) => {
+      room.updateLiveCells({ id, color, key });
+    });
+    const liveCells = room.getLiveCells();
+    wss.broadcast({ type: 'world', payload: liveCells });
   }],
 ]);
 
