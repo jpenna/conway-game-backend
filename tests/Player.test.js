@@ -4,14 +4,15 @@ const Player = require('../src/Player');
 
 describe('Player', () => {
   let player;
-  const props = { id: 'myId', color: 'blue' };
+  const props = { color: 'blue' };
 
   beforeEach(() => {
     player = new Player(props);
   });
 
-  it('Should construct player with provided id and color', () => {
-    expect(player.id).to.equal(props.id);
+  it('Should construct player with random ID');
+
+  it('Should construct player with provided color', () => {
     expect(player.color).to.equal(props.color);
   });
 

@@ -21,8 +21,8 @@ describe('Index', () => {
   };
 
   beforeEach(() => {
-    player1 = { id: 'playerId', color: 'gray' };
-    player2 = { id: 'p2', color: 'blue' };
+    player1 = { color: 'gray' };
+    player2 = { color: 'blue' };
     room.getPlayers = sinon.fake.returns([player1, player2]);
     sinon.resetHistory();
   });
@@ -43,7 +43,8 @@ describe('Index', () => {
         const message = JSON.stringify({ type: 'init', payload: player1 });
         onMessage(wss, ws, room, message);
         sinon.assert.calledOnce(room.addPlayer);
-        expect(room.addPlayer.getCall(0).args[0]).to.deep.equal(player1);
+        const { id, ...player } = room.addPlayer.getCall(0).args[0];
+        expect(player).to.deep.equal(player1);
       });
 
       it('should broadcast all players', () => {

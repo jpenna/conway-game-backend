@@ -1,25 +1,30 @@
 const Player = require('./Player');
 
 function onMessage(wss, ws, room, message) {
-  const { type, payload } = JSON.parse(message);
+  console.log(message)
+  try {
+    const { type, payload } = JSON.parse(message);
 
-  switch (type) {
-    case 'init': {
-      const { id, color } = payload;
-      const player = new Player({ id, color });
-      room.addPlayer(player);
-      const players = room.getPlayers();
-      wss.broadcast({ type: 'players', payload: players });
-      break;
+    switch (type) {
+      case 'init': {
+        const { id, color } = payload;
+        const player = new Player({ id, color });
+        room.addPlayer(player);
+        const players = room.getPlayers();
+        wss.broadcast({ type: 'players', payload: players });
+        break;
+      }
+      case 'update:player': {
+        const { id, update } = payload;
+        room.updatePlayer(id, update);
+        const players = room.getPlayers();
+        wss.broadcast({ type: 'players', payload: players });
+        break;
+      }
+      default: break;
     }
-    case 'update:player': {
-      const { id, update } = payload;
-      room.updatePlayer(id, update);
-      const players = room.getPlayers();
-      wss.broadcast({ type: 'players', payload: players });
-      break;
-    }
-    default: break;
+  } catch (e) {
+    console.error(e);
   }
 }
 

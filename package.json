@@ -26,6 +26,7 @@
   "homepage": "https://github.com/jpenna/conway-game-backend#readme",
   "dependencies": {
     "dotenv": "^7.0.0",
+    "uuid": "^3.3.2",
     "ws": "^6.2.0"
   },
   "devDependencies": {
