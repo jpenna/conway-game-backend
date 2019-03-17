@@ -106,5 +106,10 @@ describe('Index', () => {
       it('Should stop game if the majority wants stop');
       it('Should not stop game if only the minority wants');
     });
+
+    describe('game:clear', () => {
+      it('Should clear game');
+      it('Should broadcast game:reload');
+    });
   });
 });

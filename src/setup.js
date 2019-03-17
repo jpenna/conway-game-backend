@@ -62,6 +62,10 @@ const actionMap = new Map([
     if (!room.shouldStop()) return;
     wss.broadcast({ type: 'game:stop' });
   }],
+  ['game:clear', ({ wss, room }) => {
+    room.clearGame();
+    wss.broadcast({ type: 'game:reload' });
+  }],
 ]);
 
 function onMessage(wss, ws, room, message) {

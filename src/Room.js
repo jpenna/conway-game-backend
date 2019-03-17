@@ -71,6 +71,7 @@ module.exports = class Room {
   }
 
   clearGame() {
+    clearTimeout(this.clearTimeout);
     this.players = new Map();
     this.liveCells = new Map();
     this.isRunning = false;
