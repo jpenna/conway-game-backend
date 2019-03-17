@@ -4,9 +4,11 @@ const sinon = require('sinon');
 const { setup, onMessage } = require('../src/setup');
 
 describe('Index', () => {
-  let player;
+  let player1;
+  let player2;
   const room = {
     addPlayer: sinon.fake(),
+    updatePlayer: sinon.fake(),
     // getPlayers: sinon.fake(), stubbed below
   };
   const wss = {
@@ -19,8 +21,9 @@ describe('Index', () => {
   };
 
   beforeEach(() => {
-    player = { id: 'playerId', color: 'gray' };
-    room.getPlayers = sinon.fake.returns([player]);
+    player1 = { id: 'playerId', color: 'gray' };
+    player2 = { id: 'p2', color: 'blue' };
+    room.getPlayers = sinon.fake.returns([player1, player2]);
     sinon.resetHistory();
   });
 
@@ -37,17 +40,38 @@ describe('Index', () => {
   describe('On Message type...', () => {
     describe('init', () => {
       it('should setup new player with data provided by client', () => {
-        const message = JSON.stringify({ type: 'init', payload: player });
+        const message = JSON.stringify({ type: 'init', payload: player1 });
         onMessage(wss, ws, room, message);
         sinon.assert.calledOnce(room.addPlayer);
-        expect(room.addPlayer.getCall(0).args[0]).to.deep.equal(player);
+        expect(room.addPlayer.getCall(0).args[0]).to.deep.equal(player1);
       });
 
-      it('should broadcast the new player', () => {
-        const message = JSON.stringify({ type: 'init', payload: player });
+      it('should broadcast all players', () => {
+        const message = JSON.stringify({ type: 'init', payload: player1 });
         onMessage(wss, ws, room, message);
         sinon.assert.calledOnce(wss.broadcast);
-        expect(wss.broadcast.getCall(0).args[0]).to.deep.equal({ type: 'players', payload: [player] });
+        expect(wss.broadcast.getCall(0).args[0])
+          .to.deep.equal({ type: 'players', payload: [player1, player2] });
+      });
+    });
+
+    describe('update:player', () => {
+      it('Should update player with ID', () => {
+        const payload = { id: 'p2', update: { color: 'purple' } };
+        const message = JSON.stringify({ type: 'update:player', payload });
+        onMessage(wss, ws, room, message);
+        sinon.assert.calledOnce(room.updatePlayer);
+        expect(room.updatePlayer.getCall(0).args)
+          .to.deep.equal([payload.id, payload.update]);
+      });
+
+      it('Should broadcast all players', () => {
+        const payload = { id: 'p2', update: { color: 'purple' } };
+        const message = JSON.stringify({ type: 'update:player', payload });
+        onMessage(wss, ws, room, message);
+        sinon.assert.calledOnce(wss.broadcast);
+        expect(wss.broadcast.getCall(0).args[0])
+          .to.deep.equal({ type: 'players', payload: [player1, player2] });
       });
     });
   });

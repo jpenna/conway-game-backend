@@ -11,6 +11,15 @@ module.exports = class Room {
     this.players.delete(playerId);
   }
 
+  getPlayer(playerId) {
+    return this.players.get(playerId);
+  }
+
+  updatePlayer(id, update) {
+    const player = this.getPlayer(id);
+    if (update.color) player.setColor(update.color);
+  }
+
   getPlayers() {
     const players = [];
     this.players.forEach((player) => {

@@ -12,6 +12,13 @@ function onMessage(wss, ws, room, message) {
       wss.broadcast({ type: 'players', payload: players });
       break;
     }
+    case 'update:player': {
+      const { id, update } = payload;
+      room.updatePlayer(id, update);
+      const players = room.getPlayers();
+      wss.broadcast({ type: 'players', payload: players });
+      break;
+    }
     default: break;
   }
 }

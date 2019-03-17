@@ -4,6 +4,13 @@ module.exports = class Player {
     this.color = color;
   }
 
+  toString() {
+    return {
+      id: this.id,
+      color: this.color,
+    };
+  }
+
   setColor(color) {
     this.color = color;
   }

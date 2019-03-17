@@ -21,5 +21,7 @@ describe('Room', () => {
     expect(room.players.has(player.id)).to.be.false;
   });
 
+  it('Should return player with ID');
+  it('Should update players color');
   it('Should return all players as Array of Objects');
 });
