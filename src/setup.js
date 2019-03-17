@@ -42,6 +42,22 @@ const actionMap = new Map([
     const liveCells = room.getLiveCells();
     wss.broadcast({ type: 'world', payload: liveCells });
   }],
+
+  // Game
+  ['game:start', ({ wss, ws, room }) => {
+    room.updatePlayer(ws.playerId, { status: 'ready' });
+    const players = room.getPlayersList();
+    wss.broadcast({ type: 'players', payload: players });
+    if (!room.shouldStart()) return;
+    wss.broadcast({ type: 'game:start' });
+  }],
+  ['game:stop', ({ wss, ws, room }) => {
+    room.updatePlayer(ws.playerId, { status: 'stop' });
+    const players = room.getPlayersList();
+    wss.broadcast({ type: 'players', payload: players });
+    if (!room.shouldStop()) return;
+    wss.broadcast({ type: 'game:stop' });
+  }],
 ]);
 
 function onMessage(wss, ws, room, message) {

@@ -23,4 +23,9 @@ describe('Player', () => {
     player.setColor(color);
     expect(player.color).to.equal(color);
   });
+
+  it('Set new player status as `ready`');
+  it('Set new player status as `stop`');
+  it('Set new player status as `peding`');
+  it('Skip setting status if it is not acceptable');
 });

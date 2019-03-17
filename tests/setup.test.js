@@ -90,5 +90,19 @@ describe('Index', () => {
       it('Should update world with new cells');
       it('Should broadcast new world configuration');
     });
+
+    describe('game:start', () => {
+      it('Should update player status to ready');
+      it('Should broadcast players list');
+      it('Should start game if everybody is ready');
+      it('Should not start game if everybody is not ready');
+    });
+
+    describe('game:stop', () => {
+      it('Should update player status to stop');
+      it('Should broadcast players list');
+      it('Should stop game if the majority wants stop');
+      it('Should not stop game if only the minority wants');
+    });
   });
 });
