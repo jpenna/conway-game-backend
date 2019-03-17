@@ -25,3 +25,7 @@ npm test
 # Run tests
 npm run watch
 ```
+
+## CommonJs
+
+I am using CommonJs modules in this project because ES Modules is still Experimental under Node.js 10.x (https://nodejs.org/docs/latest-v10.x/api/esm.html)
