@@ -37,6 +37,9 @@ describe('Index', () => {
     sinon.assert.calledWith(wss.on.firstCall, 'connection');
   });
 
+  it('Should disconnect players that don\'t respond for too long');
+  it('Should remove player from room if connection is closed');
+
   describe('On Message type...', () => {
     describe('init', () => {
       it('should setup new player with data provided by client', () => {
@@ -54,6 +57,8 @@ describe('Index', () => {
         expect(wss.broadcast.getCall(0).args[0])
           .to.deep.equal({ type: 'players', payload: [player1, player2] });
       });
+
+      it('should set player ID in ws instance');
     });
 
     describe('player:update', () => {
@@ -74,6 +79,11 @@ describe('Index', () => {
         expect(wss.broadcast.getCall(0).args[0])
           .to.deep.equal({ type: 'players', payload: [player1, player2] });
       });
+    });
+
+    describe('player:remove', () => {
+      it('Should remove player with provide ID');
+      it('Should broadcast remaining players list');
     });
   });
 });

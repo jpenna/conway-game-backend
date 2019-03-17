@@ -13,5 +13,7 @@ module.exports = {
     ecmaVersion: 2018,
   },
   rules: {
+    'consistent-return': 0,
+    'object-curly-newline': 'off',
   },
 };
