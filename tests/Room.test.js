@@ -20,4 +20,6 @@ describe('Room', () => {
     room.removePlayer(player.id);
     expect(room.players.has(player.id)).to.be.false;
   });
+
+  it('Should return all players as Array of Objects');
 });

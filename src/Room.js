@@ -10,4 +10,12 @@ module.exports = class Room {
   removePlayer(playerId) {
     this.players.delete(playerId);
   }
+
+  getPlayers() {
+    const players = [];
+    this.players.forEach((player) => {
+      players.push(player);
+    });
+    return players;
+  }
 };

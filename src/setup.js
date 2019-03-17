@@ -1,25 +1,31 @@
-const Room = require('./Room');
 const Player = require('./Player');
 
-const room = new Room();
+function onMessage(wss, ws, room, message) {
+  const { type, payload } = JSON.parse(message);
 
-module.exports = (wss) => {
-  wss.on('connection', (ws) => {
-    ws.on('message', (message) => {
-      const { type, payload } = JSON.parse(message);
+  switch (type) {
+    case 'init': {
+      const { id, color } = payload;
+      const player = new Player({ id, color });
+      room.addPlayer(player);
+      const players = room.getPlayers();
+      wss.broadcast({ type: 'players', payload: players });
+      break;
+    }
+    default: break;
+  }
+}
 
-      switch (type) {
-        case 'init': {
-          const { id, color } = payload;
-          const player = new Player({ id, color });
-          room.addPlayer(player);
-          wss.broadcast({ type: 'newPlayer', payload: { id, color } });
-          break;
-        }
-        default: break;
-      }
-
-      console.log('received: %s', message);
+module.exports = {
+  onMessage,
+  setup: (wss, room) => {
+    wss.on('connection', (ws) => {
+      // Always send JSON
+      const sendOriginal = ws.send;
+      ws.send = function send(data) { // eslint-disable-line no-param-reassign
+        sendOriginal.call(this, JSON.stringify(data));
+      };
+      ws.on('message', message => onMessage(wss, ws, room, message));
     });
-  });
+  },
 };
