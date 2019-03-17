@@ -2,7 +2,8 @@ module.exports = class Room {
   constructor() {
     this.players = new Map();
     this.liveCells = new Map();
-    this.running = false;
+    this.isRunning = false;
+    this.startTime = 0;
   }
 
   // Players
@@ -12,8 +13,10 @@ module.exports = class Room {
 
   removePlayer(playerId) {
     this.players.delete(playerId);
-
-    // TODO remove players cells if game not running
+    if (this.isRunning) return;
+    this.liveCells.forEach((cell, key) => {
+      if (cell.id === playerId) this.liveCells.delete(key);
+    });
   }
 
   getPlayer(playerId) {
@@ -58,9 +61,29 @@ module.exports = class Room {
   }
 
   // Game
+  runClearTimeout() {
+    clearTimeout(this.clearTimeout);
+    this.clearTimeout = setTimeout(() => {
+      // If more than 10min, restart game
+      if (Date.now() - this.startTime > 600000) return this.clearGame();
+      this.runClearTimeout();
+    }, 60000);
+  }
+
+  clearGame() {
+    this.players = new Map();
+    this.liveCells = new Map();
+    this.isRunning = false;
+    this.startTime = 0;
+  }
+
   shouldStart() {
     // TODO use variable for state instead of hard coded
-    return this.getPlayersList().every(p => p.status === 'ready');
+    const shouldStart = this.getPlayersList().every(p => p.status === 'ready');
+    if (shouldStart) this.isRunning = true;
+    this.startTime = Date.now();
+    this.runClearTimeout();
+    return shouldStart;
   }
 
   shouldStop() {
@@ -68,10 +91,12 @@ module.exports = class Room {
     let count = 0;
     const players = this.getPlayersList();
     const threshold = players.length / 2;
-    return players.some((p) => {
+    const shouldStop = players.some((p) => {
       if (p.status === 'stop') count += 1;
       if (count >= threshold) return true;
       return false;
     });
+    if (shouldStop) this.isRunning = false;
+    return shouldStop;
   }
 };

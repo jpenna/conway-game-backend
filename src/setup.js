@@ -32,6 +32,8 @@ const actionMap = new Map([
     room.removePlayer(id);
     const players = room.getPlayersList();
     wss.broadcast({ type: 'players', payload: players });
+    const liveCells = room.getLiveCells();
+    wss.broadcast({ type: 'world', payload: liveCells });
   }],
 
   // World

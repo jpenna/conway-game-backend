@@ -21,6 +21,9 @@ describe('Room', () => {
     expect(room.players.has(player.id)).to.be.false;
   });
 
+  it('On remove player, should remove players cells if game is not running');
+  it('On remove player, should NOT remove players cells if game IS running');
+
   it('Should return player with ID');
   it('Should update players color');
   it('Should update players status');

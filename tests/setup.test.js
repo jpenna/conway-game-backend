@@ -85,6 +85,7 @@ describe('Index', () => {
     describe('player:remove', () => {
       it('Should remove player with provide ID');
       it('Should broadcast remaining players list');
+      it('Should broadcast updated live cells without player\'s cells');
     });
 
     describe('world:update', () => {
