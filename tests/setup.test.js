@@ -44,7 +44,7 @@ describe('Index', () => {
         onMessage(wss, ws, room, message);
         sinon.assert.calledOnce(room.addPlayer);
         const { id, ...player } = room.addPlayer.getCall(0).args[0];
-        expect(player).to.deep.equal(player1);
+        expect(player).to.deep.equal({ ...player1, status: 'pending' });
       });
 
       it('should broadcast all players', () => {
@@ -56,10 +56,10 @@ describe('Index', () => {
       });
     });
 
-    describe('update:player', () => {
+    describe('player:update', () => {
       it('Should update player with ID', () => {
         const payload = { id: 'p2', update: { color: 'purple' } };
-        const message = JSON.stringify({ type: 'update:player', payload });
+        const message = JSON.stringify({ type: 'player:update', payload });
         onMessage(wss, ws, room, message);
         sinon.assert.calledOnce(room.updatePlayer);
         expect(room.updatePlayer.getCall(0).args)
@@ -68,7 +68,7 @@ describe('Index', () => {
 
       it('Should broadcast all players', () => {
         const payload = { id: 'p2', update: { color: 'purple' } };
-        const message = JSON.stringify({ type: 'update:player', payload });
+        const message = JSON.stringify({ type: 'player:update', payload });
         onMessage(wss, ws, room, message);
         sinon.assert.calledOnce(wss.broadcast);
         expect(wss.broadcast.getCall(0).args[0])

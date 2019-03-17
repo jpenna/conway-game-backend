@@ -10,11 +10,12 @@ function onMessage(wss, ws, room, message) {
         const { id, color } = payload;
         const player = new Player({ id, color });
         room.addPlayer(player);
+        ws.send({ type: 'players:self', payload: player });
         const players = room.getPlayers();
         wss.broadcast({ type: 'players', payload: players });
         break;
       }
-      case 'update:player': {
+      case 'player:update': {
         const { id, update } = payload;
         room.updatePlayer(id, update);
         const players = room.getPlayers();

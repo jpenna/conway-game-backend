@@ -12,6 +12,8 @@ describe('Player', () => {
 
   it('Should construct player with random ID');
 
+  it('Should construct player with provided status');
+  it('Should construct player with default status if none provided');
   it('Should construct player with provided color', () => {
     expect(player.color).to.equal(props.color);
   });
