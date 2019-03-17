@@ -16,6 +16,8 @@ const actionMap = new Map([
     ws.playerId = player.id; // eslint-disable-line no-param-reassign
     const players = room.getPlayersList();
     wss.broadcast({ type: 'players', payload: players });
+    const liveCells = room.getLiveCells();
+    wss.broadcast({ type: 'world', payload: liveCells });
   }],
 
   // Players
@@ -82,7 +84,7 @@ module.exports = {
         ws.isAlive = false; // eslint-disable-line no-param-reassign
         ws.ping(noop);
       });
-    }, 30000);
+    }, 10000);
 
     wss.on('connection', (ws) => {
       ws.isAlive = true; // eslint-disable-line no-param-reassign

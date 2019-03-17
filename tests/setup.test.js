@@ -59,6 +59,7 @@ describe('Index', () => {
       });
 
       it('should set player ID in ws instance');
+      it('should send current live map');
     });
 
     describe('player:update', () => {
