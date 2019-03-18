@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Backend for conway's game of life",
   "main": "index.js",
+  "engines": {
+    "node": "10.x"
+  },
   "scripts": {
     "start": "node index.js",
     "watch": "nodemon index.js",
